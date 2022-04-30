@@ -4,6 +4,8 @@
   "description": "mano pirma express programa",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "pavyzdys": "git status",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
