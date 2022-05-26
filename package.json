@@ -1,24 +1,20 @@
 {
-  "name": "nodejs",
+  "name": "vigi-13-nodejs",
   "version": "1.0.0",
-  "description": "mano pirma express programa",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "pavyzdys": "git status",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "nodemon index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Marius393/NodeJS.git"
-  },
-  "author": "Marius",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Marius393/NodeJS/issues"
-  },
-  "homepage": "https://github.com/Marius393/NodeJS#readme",
   "dependencies": {
-    "express": "^4.18.0"
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongodb": "^4.6.0",
+    "nodemon": "^2.0.16"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
   }
 }

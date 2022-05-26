@@ -1,31 +1,64 @@
-
-/* 1 uzduotis laiko
-const express = require('express');
-const app = express();
-
-app.listen(9000, () => { 
-    console.log('serveris paleistas!');
-});
-
-app.get('/time', (request, response) => {
-    const date = new Date();
-    const dateString = date.toLocaleDateString();
-    const timeString = date.toLocaleTimeString();
-    response.send(`${dateString} ${timeString}`);
-}); */
-
-// 2 uzduotis: Counter
+require('dotenv').config();
 
 const express = require('express');
-const app = express();
 
-let count = 0;
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
-app.listen(9000, () => {
-    console.log('serveris paleistas!');
+const mongoClient = new MongoClient('mongodb://127.0.0.1:27017/');
+const client = new MongoClient(mongoClient, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
 });
 
-app.get('/counter', (request, response) => {
-    count++;
-    response.send(`Užklausų skaičius: ${count}`);
+const app = express();
+
+const knygos = [
+  'Haris Poteris',
+  'Dziungliu knyga',
+  'Biblija',
+];
+
+app.listen(process.env.PORT, () => {
+  console.log('Serveris paleistas. Laukia užklausų');
+});
+
+app.get('/books', (request, response) => {
+  client.connect(async () => {
+    const database = client.db('knyguProjektas');
+    const collection = database.collection('Knygos');
+    const result = await collection.find({}).toArray();
+
+    response.json(result);
+
+    client.close();
+  });
+});
+
+app.get('/books/:id', (request, response) => {
+  response.json(knygos);
+});
+
+app.post('/books', (request, response) => {
+  client.connect(async () => {
+    const database = client.db('knyguProjektas');
+    const collection = database.collection('Knygos');
+    const result = await collection.insertOne({
+      name: request.body.bookName,
+      pageCount: request.body.bookPageCount,
+    });
+
+    response.json(result);
+
+    client.close();
+  });
+});
+
+app.get('/books/:from/:to', (request, response) => {
+  const fromIndex = request.params.from;
+  const toIndex = request.params.to;
+
+  const atgnybtasMasyvas = knygos.slice(fromIndex, toIndex);
+
+  response.json(atgnybtasMasyvas);
 });
