@@ -1,8 +1,13 @@
 require('dotenv').config();
 
 const express = require('express');
+const cors = require('cors');
+const { ObjectId } = require('mongodb');
 
 const app = express();
+
+app.use(cors());
+
 app.use(express.json());
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
@@ -46,8 +51,25 @@ app.post('/books', (request, response) => {
     const database = client.db('KnyguProjektas');
     const collection = database.collection('Knygos');
     const result = await collection.insertOne({
-      name: request.body.bookName,
+      title: request.body.bookTitle,
       pageCount: request.body.bookPageCount,
+      price: request.body.bookPrice,
+    });
+
+    response.json(result);
+
+    client.close();
+  });
+});
+// delete
+
+app.delete('/books', (request, response) => {
+  client.connect(async () => {
+    const database = client.db('KnyguProjektas');
+    const collection = database.collection('Knygos');
+    const result = await collection.deleteOne({
+      _id: ObjectId(request.body.id),
+
     });
 
     response.json(result);
