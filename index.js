@@ -2,16 +2,18 @@ require('dotenv').config();
 
 const express = require('express');
 
+const app = express();
+app.use(express.json());
+
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-const mongoClient = new MongoClient('mongodb://127.0.0.1:27017/');
-const client = new MongoClient(mongoClient, {
+const uri = 'mongodb://localhost:27017';
+
+const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
-
-const app = express();
 
 const knygos = [
   'Haris Poteris',
@@ -25,7 +27,7 @@ app.listen(process.env.PORT, () => {
 
 app.get('/books', (request, response) => {
   client.connect(async () => {
-    const database = client.db('knyguProjektas');
+    const database = client.db('KnyguProjektas');
     const collection = database.collection('Knygos');
     const result = await collection.find({}).toArray();
 
@@ -41,7 +43,7 @@ app.get('/books/:id', (request, response) => {
 
 app.post('/books', (request, response) => {
   client.connect(async () => {
-    const database = client.db('knyguProjektas');
+    const database = client.db('KnyguProjektas');
     const collection = database.collection('Knygos');
     const result = await collection.insertOne({
       name: request.body.bookName,
